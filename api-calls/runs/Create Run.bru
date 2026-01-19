@@ -1,0 +1,23 @@
+meta {
+  name: Create Run
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseurl}}/runs
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "distance_km" : 2.5,
+    "time_in_minutes" : 25
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

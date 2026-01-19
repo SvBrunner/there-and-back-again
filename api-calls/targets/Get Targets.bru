@@ -1,0 +1,15 @@
+meta {
+  name: Get Targets
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseurl}}/targets
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

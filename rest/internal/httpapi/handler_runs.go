@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
-	"time"
 
 	"github.com/SvBrunner/there-and-back-again/internal/service"
 )
@@ -20,7 +19,6 @@ func NewRunsHandler(svc service.Service) *RunsHandler {
 type addRunRequest struct {
 	DistanceKm    float64 `json:"distance_km"`
 	TimeInMinutes int32   `json:"time_in_minutes"`
-	Date          string  `json:"date,omitempty"`
 }
 
 func (h *RunsHandler) Handle(w http.ResponseWriter, r *http.Request) {
@@ -47,11 +45,8 @@ func (h *RunsHandler) addRun(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if req.Date != "" {
-		if _, err := time.Parse(time.RFC3339, req.Date); err != nil {
-			writeError(w, http.StatusBadRequest, "invalid_date", "date must be RFC3339 (e.g. 2026-01-18T10:00:00Z).")
-			return
-		}
+	if req.TimeInMinutes <= 0 {
+		writeError(w, http.StatusBadRequest, "invalid_time", "Time must be greater than 0")
 	}
 
 	run, err := h.svc.AddRun(r.Context(), req.DistanceKm, req.TimeInMinutes)

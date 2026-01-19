@@ -14,7 +14,9 @@ func Router(svc service.Service) http.Handler {
 		_, _ = w.Write([]byte("ok"))
 	})
 	runsHandler := NewRunsHandler(svc)
-	mux.Handle("/runs", http.HandlerFunc(runsHandler.Handle))
+	targetsHandler := NewTargetsHandler(svc)
 
+	mux.Handle("/runs", http.HandlerFunc(runsHandler.Handle))
+	mux.Handle("/targets", http.HandlerFunc(targetsHandler.Handle))
 	return mux
 }

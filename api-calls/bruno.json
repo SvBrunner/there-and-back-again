@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "There and back again",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

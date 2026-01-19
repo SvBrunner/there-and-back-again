@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	svc := service.NewMemoryService("Shire to Mordor", 1800)
+	svc := service.NewMemoryService()
 
 	mux := httpapi.Router(svc)
 

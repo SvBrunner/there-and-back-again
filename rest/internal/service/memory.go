@@ -13,22 +13,23 @@ import (
 type MemoryService struct {
 	mu sync.Mutex
 
-	journeyName string
-	targetKm    float64
-
-	runs []domain.Run
+	runs    []domain.Run
+	targets []domain.Target
 }
 
-func NewMemoryService(journeyName string, targetKm float64) *MemoryService {
+func NewMemoryService() *MemoryService {
 	return &MemoryService{
-		journeyName: journeyName,
-		targetKm:    targetKm,
-		runs:        []domain.Run{},
+		runs:    []domain.Run{},
+		targets: []domain.Target{},
 	}
 }
 
 func (s *MemoryService) AddRun(ctx context.Context, distanceKm float64, timeinminutes int32) (domain.Run, error) {
-	_ = ctx
+	select {
+	case <-ctx.Done():
+		return domain.Run{}, ctx.Err()
+	default:
+	}
 
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -44,13 +45,51 @@ func (s *MemoryService) AddRun(ctx context.Context, distanceKm float64, timeinmi
 }
 
 func (s *MemoryService) ListRuns(ctx context.Context) ([]domain.Run, error) {
-	_ = ctx
+	select {
+	case <-ctx.Done():
+		return []domain.Run{}, ctx.Err()
+	default:
+	}
 
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
 	out := make([]domain.Run, len(s.runs))
 	copy(out, s.runs)
+	return out, nil
+}
+
+func (s *MemoryService) AddTarget(ctx context.Context, distanceKm float64, name string) (domain.Target, error) {
+	select {
+	case <-ctx.Done():
+		return domain.Target{}, ctx.Err()
+	default:
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	target := domain.Target{
+		ID:           newID(),
+		DistanceInKm: distanceKm,
+		Name:         name,
+	}
+	s.targets = append(s.targets, target)
+	return target, nil
+}
+
+func (s *MemoryService) ListTargets(ctx context.Context) ([]domain.Target, error) {
+	select {
+	case <-ctx.Done():
+		return []domain.Target{}, ctx.Err()
+	default:
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	out := make([]domain.Target, len(s.targets))
+	copy(out, s.targets)
 	return out, nil
 }
 

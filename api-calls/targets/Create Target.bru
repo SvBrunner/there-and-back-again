@@ -1,0 +1,23 @@
+meta {
+  name: Create Target
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseurl}}/targets
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "distance": 10.0,
+    "name": "Next Point"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
