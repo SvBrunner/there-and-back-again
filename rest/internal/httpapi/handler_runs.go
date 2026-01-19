@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/SvBrunner/thereandbackagain/internal/service"
+	"github.com/SvBrunner/there-and-back-again/internal/service"
 )
 
 type RunsHandler struct {
@@ -47,7 +47,6 @@ func (h *RunsHandler) addRun(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// optional date validation (if you want it). For now we ignore or parse.
 	if req.Date != "" {
 		if _, err := time.Parse(time.RFC3339, req.Date); err != nil {
 			writeError(w, http.StatusBadRequest, "invalid_date", "date must be RFC3339 (e.g. 2026-01-18T10:00:00Z).")
@@ -55,9 +54,8 @@ func (h *RunsHandler) addRun(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	run, err := h.svc.AddRun(r.Context(), req.DistanceKm)
+	run, err := h.svc.AddRun(r.Context(), req.DistanceKm, req.TimeInMinutes)
 	if err != nil {
-		// Beispiel für Domain-/Repo-Fehler mapping
 		if errors.Is(err, service.ErrNotFound) {
 			writeError(w, http.StatusNotFound, "not_found", "Resource not found.")
 			return

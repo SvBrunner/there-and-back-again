@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/SvBrunner/thereandbackagain/internal/domain"
+	"github.com/SvBrunner/there-and-back-again/internal/domain"
 )
 
 type MemoryService struct {
@@ -27,16 +27,17 @@ func NewMemoryService(journeyName string, targetKm float64) *MemoryService {
 	}
 }
 
-func (s *MemoryService) AddRun(ctx context.Context, distanceKm float64) (domain.Run, error) {
+func (s *MemoryService) AddRun(ctx context.Context, distanceKm float64, timeinminutes int32) (domain.Run, error) {
 	_ = ctx
 
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
 	run := domain.Run{
-		ID:         newID(),
-		Date:       time.Now().UTC(),
-		DistanceKm: distanceKm,
+		ID:            newID(),
+		Timestamp:     time.Now().UTC(),
+		DistanceInKm:  distanceKm,
+		TimeInMinutes: timeinminutes,
 	}
 	s.runs = append(s.runs, run)
 	return run, nil

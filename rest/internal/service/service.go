@@ -2,11 +2,14 @@ package service
 
 import (
 	"context"
+	"errors"
 
-	"github.com/SvBrunner/thereandbackagain/internal/domain"
+	"github.com/SvBrunner/there-and-back-again/internal/domain"
 )
 
+var ErrNotFound = errors.New("not found")
+
 type Service interface {
-	AddRun(ctx context.Context, distanceKm float64) (domain.Run, error)
+	AddRun(ctx context.Context, distanceKm float64, timeInMinutes int32) (domain.Run, error)
 	ListRuns(ctx context.Context) ([]domain.Run, error)
-}<
+}

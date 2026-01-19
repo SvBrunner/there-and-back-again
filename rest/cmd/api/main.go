@@ -4,11 +4,14 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/SvBrunner/thereandbackagain/internal/httpapi"
+	"github.com/SvBrunner/there-and-back-again/internal/httpapi"
+	"github.com/SvBrunner/there-and-back-again/internal/service"
 )
 
 func main() {
-	mux := httpapi.Router(myService)
+	svc := service.NewMemoryService("Shire to Mordor", 1800)
+
+	mux := httpapi.Router(svc)
 
 	addr := ":8080"
 	log.Printf("listening on %s", addr)

@@ -3,7 +3,7 @@ package httpapi
 import (
 	"net/http"
 
-	"github.com/SvBrunner/thereandbackagain/internal/service"
+	"github.com/SvBrunner/there-and-back-again/internal/service"
 )
 
 func Router(svc service.Service) http.Handler {
