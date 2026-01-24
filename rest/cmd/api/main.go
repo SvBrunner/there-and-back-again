@@ -9,8 +9,12 @@ import (
 )
 
 func main() {
-	svc := service.NewMemoryService()
+	dsn := "file:app.db?_foreign_keys=1&cache=shared&mode=rwc"
+	svc, err := service.NewSqliteService(dsn)
 
+	if err != nil {
+		log.Fatalf("failed to create service: %v", err)
+	}
 	mux := httpapi.Router(svc)
 
 	addr := ":8080"
